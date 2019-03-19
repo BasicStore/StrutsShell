@@ -145,6 +145,15 @@ Use as required:
 https://codesjava.com/struts-2-validation-framework
 https://struts.apache.org/getting-started/form-validation-using-xml.html
 
+Example of datetime field validation with param failing: 'min'
+<field name="personBean.birthday2">
+		<field-validator type="date">
+		 <param name="min">01.01.2019</param>
+   		 <param name="max">01.01.1900</param>
+         <message key="register.birthday2.error"></message>
+      </field-validator>
+</field>
+
 *****************************************************************************
 ALTERNATIVES to pre-populating a text field
 
@@ -228,7 +237,6 @@ Example usage is to test validation in an action.
     https://stackoverflow.com/questions/18407063/i18n-on-dropdown-menu-using-sselect-tag
 
   - need a more satiscfactory LocalDate solution for struts 2 
-
 
 
 

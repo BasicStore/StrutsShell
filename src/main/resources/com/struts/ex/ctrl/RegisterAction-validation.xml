@@ -32,12 +32,4 @@
       </field-validator>
     </field>
     
-    <field name="personBean.birthday2">
-		<field-validator type="date">
-		 <param name="min">01.01.2019</param>
-   		 <param name="max">01.01.1900</param>
-         <message key="register.birthday2.error"></message>
-      </field-validator>
-   </field>
-    
 </validators>
