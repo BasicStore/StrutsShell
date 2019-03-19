@@ -27,7 +27,7 @@ public class RegisterAction extends ActionSupport {
     	logger.info("Age = " + personBean.getAge());    	
      	logger.info("Age = " + personBean.getBirthday2().toString());
     	
-     	// brew your own forward tags.....
+     	// brew your own forward tags.....micro brewery
 //     	if (personBean.getFirstName() != null) {
 //     		return "badddd";
 //     	}
