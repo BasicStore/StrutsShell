@@ -1,0 +1,255 @@
+******************************************************************************
+Start up your own Struts:
+This shell uses example:  https://jgalacambra.wordpress.com/2016/06/13/spring-boot-and-struts-2/
+
+http://localhost:8080/users
+
+******************************************************************************
+NOTE
+
+- included log file under project directory
+- had to create a webapp directory within src/main
+- then to get tld working (hopefully), had to fabricate WEB-INF structure beneath 
+
+******************************************************************************
+STRUTS HOME: http://struts.apache.org/
+STRUTS FRAMEWORK: https://codesjava.com/struts2-framework-overview
+
+
+Up-to-date tutorial as of March 2019:
+--> https://www.tutorialspoint.com/struts_2/struts_control_tags.htm
+
+******************************************************************************
+STRUTS 1 v STRUTS 2
+
+The major difference is that in Struts1.x the request directly goes to the servlet, 
+whereas in Struts2.x the request and response travel through the stack of interceptor or filter. ... 
+
+In Struts1.x execute() method exposes the servlet API for testing. 
+Struts2.x Dependancy Injection be used to simplify the testing process.
+
+******************************************************************************
+
+Example:
+https://github.com/linux-china/struts2-spring-boot-integration
+
+******************************************************************************
+Note: This was setup as a spring boot web project, but with specific dependencies added (incl struts)
+
+Issues:
+1) Had to manually create webapp folder for jsps with this spring boot 2 framework for dev testing
+2) Problem evaluating gender with spring boot:
+   a) the database column of varchar(1) is read as a char, so had to increase this
+   b) Even after resolving this, the following expression fails unless gender is a string,
+      somehow if the value is one character long it is read as a number or char:
+      <s:if test="gender == 'Male'">Male</s:if><s:else>Female</s:else></td>
+     
+3) Build issue in eclipse, hanging page after a bad build pom declaration.
+   File would not save.
+   resorted to restarting machine and then updating file directly before opening eclipse.
+ 
+******************************************************************************      
+Internationalization
+https://dzone.com/articles/internationalizationlocalizati
+
+See UserAction.java
+    users.jsp
+    struts config
+
+- Note that there is no need to explicitly declare the resource bundle for internationalization (it seems)
+- Spring MVC style localeResolver() in main class does not have any effect
+- Invoking setText() ActionSupport somehow knows the value set here:  <s:param name="request_locale">fr</s:param>
+  and intercepts the call to retrieve the message
+
+See this link for populating a form:
+https://www.tutorialspoint.com/struts_2/struts_localization.htm
+******************************************************************************
+Forms
+
+- seems this can be a POLO now, no need to extend struts Form implementation. No annotations.
+- Bad practice, but if an error is thrown from a jsp onto the action (eg. the user enters alphabetical input into an integer name field):
+  add this option to the action!  <result name="input">/thankyou.jsp</result>
+  
+******************************************************************************  
+MECHANICS
+Note that personBean representing the Person class in register.jsp is not actually
+defined until the action that responds to the form. So under the bonnet it is
+ActionSupport which spomehow binds the form to the underlying data object
+
+******************************************************************************
+DATES INVESTIGATIONS:
+
+For the component, use struts2-dojo-plugin: https://www.javatpoint.com/struts-2-datetimepicker-example
+--> <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+--> HEAD:  <sx:head  /> 
+--> <sx:datetimepicker name="personBean.birthday" key="birthday" displayFormat="yyyy-MM-dd"/>
+--> good practice to get the date format from 1 place, eg. struts.date.format
+
+==> Note that eclipse took a while to compile this....
+==> UNFORTUNATELY, this is a java 7 solution and uses java.util.Date
+
+-----------------------
+
+--> Investgate later:
+
+https://struts.apache.org/maven/struts2-core/apidocs/org/apache/struts2/components/Date.html
+  <s:date name="person.birthday" format="dd/MM/yyyy" />
+  <s:date name="person.birthday" format="%{getText('some.i18n.key')}" />
+  <s:date name="person.birthday" nice="true" />
+  <s:date name="person.birthday" />
+
+
+https://stackoverflow.com/questions/37777284/using-java8-time-in-jsps?noredirect=1&lq=1
+https://stackoverflow.com/questions/35606551/jstl-localdatetime-format
+https://stackoverflow.com/questions/44746757/using-custom-tag-files-in-jsp-with-spring-boot
+https://github.com/sargue/java-time-jsptags/blob/master/src/main/java/net/sargue/time/jsptags/ParseLocalDateTag.java
+
+*****************************************************************************
+SESSION HANDLING
+
+Map session = ActionContext.getContext().getSession();
+session.put("state", state);
+
+Note the other possibilities:
+eg context     --> ActionContext.getContext().getContextMap();
+   application --> ActionContext.getContext().getApplication();
+
+------------------------------
+
+RECOMMENDED APPORACH:
+https://struts.apache.org/core-developers/accessing-application-session-request-objects.html
+- (Map) ActionContext.getContext().get("application");
+- (Map) ActionContext.getContext().get("session");
+- (Map) ActionContext.getContext().get("request");
+- ServletActionContext.getRequest().getSession().put("myId", myProp);
+
+<s:property value="#session.myId" />
+<s:property value="#request.myId" />
+<s:property value="#attr.myId" />
+
+------------------------------
+
+Old Way:
+if (request != null && request.getSession() != null) {
+    request.getSession().setAttribute("state", state);
+}
+
+*****************************************************************************
+VALIDATION
+
+Note the validation.xml goes in the resources file at the same level as the Action.
+It prevents the action executing from the preceding form if there are user input errors.
+Note the naming format:  [XXXAction]-validation.xml
+
+Use as required:
+https://codesjava.com/struts-2-validation-framework
+https://struts.apache.org/getting-started/form-validation-using-xml.html
+
+*****************************************************************************
+ALTERNATIVES to pre-populating a text field
+
+===> the message is localized with either approach:
+<s:textfield key="lastName" name="personBean.lastName" value="%{getText('lastname')}" />
+<s:textfield name="person.lastName" label="<s:text name="message"/>" ../>  
+      
+*****************************************************************************
+EXTERNAL FILES 
+
+CSS: <link rel="stylesheet" type="text/css" href="./css/global.css"/>
+     --> <h2 class="mycss"><s:text name="message" /></h2>
+	 --> <h2 class="mycss2"><s:property value="message" /></h2> 
+
+JS:  <script type="text/javascript" src="./js/global.js"></script>
+     --> <s:submit  onclick="doSomeJS()"/>
+     
+*****************************************************************************
+FORMS AND FLOW:
+
+ISSUE 1
+Be careful to distinguish from the action relating to a jsp that was arrived at via a direct 
+link to the jsp - ie where the action relates directly to the form on the jsp just gone
+V
+where the jsp follows the action of the same name
+--> solution is to put the variables into a request or session.
+
+ISSUE 2 - oddly, remember to avoid constructors on the data object 
+
+A                    B                        C 
+register.jsp   ==>   RegisterAction     ==>   thankyou.jsp   
+lists.jps      ==>   FormReaderAction   ==>   formReaderSuccess.jsp
+
+A - form refers to object in the action B (not referenced in the preceding action / jsp).
+    However, the initial value can be set from a request/session variable:
+      eg  value="%{#request.mySheep.sheep1}"
+B - reads the value created within the form
+C - forward to jsp
+
+*****************************************************************************
+Setup values for dropdowns, lists etc in the action before the jsp form,
+and then populate the bean in the action following the jsp form:
+
+A                 B                    C                        D 
+ListAction   ==>  lists.jps      ==>   FormReaderAction   ==>   formReaderSuccess.jsp
+
+*****************************************************************************
+Radio Objects
+
+An alternative to approach taken in lists.jsp for radios:
+--> https://www.mkyong.com/struts2/struts-2-sradio-radio-button-example/
+
+*****************************************************************************
+Struts 2 Framework Testing:
+
+https://struts.apache.org/getting-started/unit-testing.html
+
+Example usage is to test validation in an action.
+
+*****************************************************************************
+
+  - templates and includes
+    https://struts.apache.org/tag-developers/
+
+  - themes
+    https://struts.apache.org/tag-developers/
+
+  - struts 2 jsp conditionals
+    https://stackoverflow.com/questions/14454601/displaying-value-from-struts2-list-in-html-table
+    https://stackoverflow.com/questions/1366645/struts-jsp-set-textfield-value-from-session-information
+
+  - tests   
+
+  - GENERAL READING:
+    https://www.tutorialspoint.com/struts_2/index.htm
+    eg:
+      --> custom tag lib
+      --> webservices https://struts.apache.org/plugins/convention/#action-annotation
+
+  - further locale steps:
+    https://stackoverflow.com/questions/18407063/i18n-on-dropdown-menu-using-sselect-tag
+
+  - need a more satiscfactory LocalDate solution for struts 2 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

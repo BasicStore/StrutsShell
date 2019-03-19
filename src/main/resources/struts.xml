@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+  <constant name="struts.devMode" value="true" />
+  <constant name = "struts.custom.i18n.resources" value = "global" />
+  
+  <package name="default" extends="struts-default">
+
+	<global-results>
+        <result name="error">/error.jsp</result>
+        <result name="error-null">/error-null.jsp</result>
+    </global-results>
+
+    <global-exception-mappings>
+        <exception-mapping exception="java.lang.NullPointerException" result="error-null"/>
+        <exception-mapping exception="java.lang.Exception" result="error"/>
+    </global-exception-mappings>
+
+    <action name="users" class="com.struts.ex.ctrl.UserAction" method="execute">
+      <result name="success">/users.jsp</result> 
+    </action>
+    
+    <action name="register" class="com.struts.ex.ctrl.RegisterAction" method="execute">
+    	<result name="input">/register.jsp</result>
+    	<result name="success">/thankyou.jsp</result>
+	</action>
+    
+    <action name="listdisplay" class="com.struts.ex.ctrl.ListAction" method="execute">
+      <result name="success">/lists.jsp</result> 
+    </action>
+    
+    <action name="formReader" class="com.struts.ex.ctrl.FormReaderAction" method="execute">
+    	<result name="input">/lists.jsp</result>
+    	<result name="success">/formReaderSuccess.jsp</result>
+	</action>
+    
+  </package>
+</struts>
+
+
+
+	
