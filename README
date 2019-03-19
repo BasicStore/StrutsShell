@@ -15,9 +15,9 @@ NOTE
 STRUTS HOME: http://struts.apache.org/
 STRUTS FRAMEWORK: https://codesjava.com/struts2-framework-overview
 
-
 Up-to-date tutorial as of March 2019:
---> https://www.tutorialspoint.com/struts_2/struts_control_tags.htm
+--> https://www.tutorialspoint.com/struts_2/index.htm
+--> https://www.javatpoint.com/struts-2-tutorial
 
 ******************************************************************************
 STRUTS 1 v STRUTS 2
@@ -127,6 +127,9 @@ https://struts.apache.org/core-developers/accessing-application-session-request-
 <s:property value="#request.myId" />
 <s:property value="#attr.myId" />
 
+OR old fashioned:
+<s:textfield label="Name" name="name" value="<% session.user.getName(); %>"/>
+
 ------------------------------
 
 Old Way:
@@ -215,29 +218,47 @@ Example usage is to test validation in an action.
 
 *****************************************************************************
 
-  - templates and includes
-    https://struts.apache.org/tag-developers/
+Final jobs:
 
-  - themes
-    https://struts.apache.org/tag-developers/
+ - basic include example poc 
+   https://www.mkyong.com/struts2/struts-2-include-tag-example/
 
-  - struts 2 jsp conditionals
+ - !!!! annotations poc (instead of struts.xml + instead of validation.xml)
+    https://www.tutorialspoint.com/struts_2/struts_annotations.htm
+    https://struts.apache.org/plugins/convention/#action-annotation
+   
+ - struts 2 jsp conditionals:
+    https://www.tutorialspoint.com/struts_2/struts_if_else_tags.htm  
+    --> struts conditional string	
     https://stackoverflow.com/questions/14454601/displaying-value-from-struts2-list-in-html-table
-    https://stackoverflow.com/questions/1366645/struts-jsp-set-textfield-value-from-session-information
+    --> <s:if test="%{#status.index == 0}"> on int
+    https://struts.apache.org/maven/struts2-core/apidocs/org/apache/struts2/components/If.html
+    --> <s:if test="%{false}">
+    General:
+    https://struts.apache.org/getting-started/control-tags.html
+    
+  - tests with spring boot 2 and struts 2
+    https://struts.apache.org/plugins/junit/#struts-actions-using-spring
 
-  - tests   
+  - Tiles:
+    https://www.devglan.com/spring-boot/spring-boot-mvc-apache-tiles-example [spring boot version with no web.xml]
+    https://examples.javacodegeeks.com/enterprise-java/struts-2/struts-tiles-plugin-eclipse-example/#strutsTilesFramework [old version with web.xml]  
+ 
+  - difference between struts 2 + spring MVC 
+    https://dzone.com/articles/struts-2-vs-springmvc-know-the-difference-choose-t 
+    
+  - improved package layout:
+    https://www.devglan.com/spring-boot/spring-boot-mvc-apache-tiles-example
+  
+  - need a more satisfactory LocalDate solution for struts 2 
 
-  - GENERAL READING:
-    https://www.tutorialspoint.com/struts_2/index.htm
-    eg:
-      --> custom tag lib
-      --> webservices https://struts.apache.org/plugins/convention/#action-annotation
+===================
 
-  - further locale steps:
-    https://stackoverflow.com/questions/18407063/i18n-on-dropdown-menu-using-sselect-tag
+Add to GIT at home:
+- sheep app
+- old rpstruts app
 
-  - need a more satiscfactory LocalDate solution for struts 2 
-
+===================
 
 
 

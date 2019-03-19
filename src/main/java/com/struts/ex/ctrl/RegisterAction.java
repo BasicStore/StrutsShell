@@ -63,33 +63,6 @@ public class RegisterAction extends ActionSupport {
     public void setPersonBean(Person person) {
         personBean = person;
     }
-    
-    // TODO this can't be right....?
- // TODO LAST HOPE
-// 	private List<String> countriesList;
-//    public List<String> initCountriesList() {
-//    	
-//    	logger.info("initializing countriesList !!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-//    	
-//    	if (countriesList == null) {
-//    		countriesList = new ArrayList<String>();
-//    	}
-//    	
-//    	Map ctxt = (Map) ActionContext.getContext().get("session");
-//    	ctxt.put("countriesList", Arrays.asList("British", "French", "Czech"));
-//    	
-//    	return countriesList;
-//    }
-//    
-//    
-// 
-//	public List<String> getCountriesList() {
-//		return countriesList;
-//	}
-//
-//	public void setCountriesList(List<String> countriesList) {
-//		this.countriesList = countriesList;
-//	}
-    
-
+   
+   
 }
